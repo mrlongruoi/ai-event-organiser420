@@ -99,6 +99,9 @@ export default defineSchema({
     coverImage: v.optional(v.string()),
     themeColor: v.optional(v.string()),
 
+    // Analytics
+    viewCount: v.number(),
+
     // Timestamps
     createdAt: v.number(),
     updatedAt: v.number(),
