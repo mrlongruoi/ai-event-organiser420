@@ -105,7 +105,7 @@ export default function EventDetailPage() {
       style={{
         backgroundColor: event.themeColor || "#1e3a8a",
       }}
-      className="min-h-screen py-8 -mt-10 md:-mt-16 lg:-mx-5"
+      className="min-h-screen py-8 -mt-6 md:-mt-16 lg:-mx-5"
     >
       <div className="max-w-7xl mx-auto px-8">
         {/* Event Title & Info */}

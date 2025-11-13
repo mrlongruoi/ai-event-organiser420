@@ -7,15 +7,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { format } from "date-fns";
 import { State, City } from "country-state-city";
-import { CalendarIcon, Loader2 } from "lucide-react";
+import { CalendarIcon, Loader2, Sparkles } from "lucide-react";
 import { useConvexMutation, useConvexQuery } from "@/hooks/use-convex-query";
 import { api } from "@/convex/_generated/api";
 import { toast } from "sonner";
+import { useAuth } from "@clerk/nextjs";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
 import {
   Popover,
   PopoverTrigger,
@@ -32,7 +34,9 @@ import {
 
 import UnsplashImagePicker from "@/components/unsplash-image-picker";
 import AIEventCreator from "./_components/ai-event-creator";
+import UpgradeModal from "@/components/upgrade-modal";
 import { CATEGORIES } from "@/lib/data";
+import Image from "next/image";
 
 // HH:MM in 24h
 const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
@@ -61,6 +65,12 @@ const eventSchema = z.object({
 export default function CreateEventPage() {
   const router = useRouter();
   const [showImagePicker, setShowImagePicker] = useState(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [upgradeReason, setUpgradeReason] = useState("limit"); // "limit" or "color"
+
+  // Check if user has Pro plan
+  const { has } = useAuth();
+  const hasPro = has?.({ plan: "pro" });
 
   const { data: currentUser } = useConvexQuery(api.users.getCurrentUser);
   const { mutate: createEvent, isLoading } = useConvexMutation(
@@ -89,8 +99,6 @@ export default function CreateEventPage() {
     },
   });
 
-  console.log(errors);
-
   const themeColor = watch("themeColor");
   const ticketType = watch("ticketType");
   const selectedState = watch("state");
@@ -106,6 +114,22 @@ export default function CreateEventPage() {
     return City.getCitiesOfState("IN", st.isoCode);
   }, [selectedState, indianStates]);
 
+  // Color presets - show all for Pro, only default for Free
+  const colorPresets = [
+    "#1e3a8a", // Default color (always available)
+    ...(hasPro ? ["#4c1d95", "#065f46", "#92400e", "#7f1d1d", "#831843"] : []),
+  ];
+
+  const handleColorClick = (color) => {
+    // If not default color and user doesn't have Pro
+    if (color !== "#1e3a8a" && !hasPro) {
+      setUpgradeReason("color");
+      setShowUpgradeModal(true);
+      return;
+    }
+    setValue("themeColor", color);
+  };
+
   const combineDateTime = (date, time) => {
     if (!date || !time) return null;
     const [hh, mm] = time.split(":").map(Number);
@@ -116,8 +140,6 @@ export default function CreateEventPage() {
 
   const onSubmit = async (data) => {
     try {
-      console.log(data);
-
       const start = combineDateTime(data.startDate, data.startTime);
       const end = combineDateTime(data.endDate, data.endTime);
 
@@ -130,10 +152,17 @@ export default function CreateEventPage() {
         return;
       }
 
-      const premium = true; // Placeholder for premium check
+      // Check event limit for Free users
+      if (!hasPro && currentUser?.freeEventsCreated >= 1) {
+        setUpgradeReason("limit");
+        setShowUpgradeModal(true);
+        return;
+      }
 
-      if (currentUser?.freeEventsCreated >= 1 && !premium) {
-        toast.error("You've reached your free event limit. Please upgrade!");
+      // Check if trying to use custom color without Pro
+      if (data.themeColor !== "#1e3a8a" && !hasPro) {
+        setUpgradeReason("color");
+        setShowUpgradeModal(true);
         return;
       }
 
@@ -166,15 +195,6 @@ export default function CreateEventPage() {
     }
   };
 
-  const colorPresets = [
-    "#4c1d95",
-    "#1e3a8a",
-    "#065f46",
-    "#92400e",
-    "#7f1d1d",
-    "#831843",
-  ];
-
   const handleAIGenerate = (generatedData) => {
     setValue("title", generatedData.title);
     setValue("description", generatedData.description);
@@ -186,12 +206,19 @@ export default function CreateEventPage() {
 
   return (
     <div
-      className="min-h-screen transition-colors duration-300 px-6 py-10 rounded-xl"
+      className="min-h-screen transition-colors duration-300 px-6 py-8 -mt-6 md:-mt-16 lg:-mt-5 lg:rounded-md"
       style={{ backgroundColor: themeColor }}
     >
       {/* Header */}
       <div className="max-w-6xl mx-auto flex flex-col gap-5 md:flex-row justify-between mb-10">
-        <h1 className="text-4xl font-bold">Create Event</h1>
+        <div>
+          <h1 className="text-4xl font-bold">Create Event</h1>
+          {!hasPro && (
+            <p className="text-sm text-muted-foreground mt-2">
+              Free: {currentUser?.freeEventsCreated || 0}/1 events created
+            </p>
+          )}
+        </div>
         <AIEventCreator onEventGenerated={handleAIGenerate} />
       </div>
 
@@ -203,10 +230,13 @@ export default function CreateEventPage() {
             onClick={() => setShowImagePicker(true)}
           >
             {coverImage ? (
-              <img
+              <Image
                 src={coverImage}
                 alt="Cover"
                 className="w-full h-full object-cover"
+                width={500} // Adjust width as needed
+                height={500} // Adjust height as needed
+                priority // Optional: prioritize loading this image
               />
             ) : (
               <span className="opacity-60 text-sm">
@@ -216,35 +246,76 @@ export default function CreateEventPage() {
           </div>
 
           <div className="space-y-2">
-            <Label className="text-sm">Theme Color</Label>
-            <div className="flex gap-2">
+            <div className="flex items-center justify-between">
+              <Label className="text-sm">Theme Color</Label>
+              {!hasPro && (
+                <Badge variant="secondary" className="text-xs gap-1">
+                  <Sparkles className="w-3 h-3" />
+                  Pro
+                </Badge>
+              )}
+            </div>
+            <div className="flex gap-2 flex-wrap">
               {colorPresets.map((color) => (
                 <button
                   key={color}
                   type="button"
-                  className="w-10 h-10 rounded-full border-2 transition-all"
+                  className={`w-10 h-10 rounded-full border-2 transition-all ${
+                    !hasPro && color !== "#1e3a8a"
+                      ? "opacity-40 cursor-not-allowed"
+                      : "hover:scale-110"
+                  }`}
                   style={{
                     backgroundColor: color,
                     borderColor: themeColor === color ? "white" : "transparent",
                   }}
-                  onClick={() => setValue("themeColor", color)}
+                  onClick={() => handleColorClick(color)}
+                  title={
+                    !hasPro && color !== "#1e3a8a"
+                      ? "Upgrade to Pro for custom colors"
+                      : ""
+                  }
                 />
               ))}
+              {!hasPro && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setUpgradeReason("color");
+                    setShowUpgradeModal(true);
+                  }}
+                  className="w-10 h-10 rounded-full border-2 border-dashed border-purple-300 flex items-center justify-center hover:border-purple-500 transition-colors"
+                  title="Unlock more colors with Pro"
+                >
+                  <Sparkles className="w-5 h-5 text-purple-400" />
+                </button>
+              )}
             </div>
+            {!hasPro && (
+              <p className="text-xs text-muted-foreground">
+                Upgrade to Pro to unlock custom theme colors
+              </p>
+            )}
           </div>
         </div>
 
         {/* RIGHT: Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
           {/* Title */}
-          <Input
-            {...register("title")}
-            placeholder="Event Name"
-            className="text-3xl font-semibold bg-transparent border-none focus-visible:ring-0"
-          />
-          {errors.title && <p className="text-sm">{errors.title.message}</p>}
+          <div>
+            <Input
+              {...register("title")}
+              placeholder="Event Name"
+              className="text-3xl font-semibold bg-transparent border-none focus-visible:ring-0"
+            />
+            {errors.title && (
+              <p className="text-sm text-red-400 mt-1">
+                {errors.title.message}
+              </p>
+            )}
+          </div>
 
-          {/* Date + Time (Luma-style) */}
+          {/* Date + Time */}
           <div className="grid grid-cols-2 gap-6">
             {/* Start */}
             <div className="space-y-2">
@@ -275,7 +346,7 @@ export default function CreateEventPage() {
                 />
               </div>
               {(errors.startDate || errors.startTime) && (
-                <p className="text-sm">
+                <p className="text-sm text-red-400">
                   {errors.startDate?.message || errors.startTime?.message}
                 </p>
               )}
@@ -311,7 +382,7 @@ export default function CreateEventPage() {
                 />
               </div>
               {(errors.endDate || errors.endTime) && (
-                <p className="text-sm">
+                <p className="text-sm text-red-400">
                   {errors.endDate?.message || errors.endTime?.message}
                 </p>
               )}
@@ -332,7 +403,7 @@ export default function CreateEventPage() {
                   <SelectContent>
                     {CATEGORIES.map((cat) => (
                       <SelectItem key={cat.id} value={cat.id}>
-                        {cat.label}
+                        {cat.icon} {cat.label}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -340,7 +411,7 @@ export default function CreateEventPage() {
               )}
             />
             {errors.category && (
-              <p className="text-sm">{errors.category.message}</p>
+              <p className="text-sm text-red-400">{errors.category.message}</p>
             )}
           </div>
 
@@ -410,14 +481,13 @@ export default function CreateEventPage() {
                 type="url"
               />
               {errors.venue && (
-                <p className="text-sm">{errors.venue.message}</p>
+                <p className="text-sm text-red-400">{errors.venue.message}</p>
               )}
 
               <Input
                 {...register("address")}
                 placeholder="Full address / street / building (optional)"
               />
-              {errors.city && <p className="text-sm">{errors.city.message}</p>}
             </div>
           </div>
 
@@ -430,7 +500,9 @@ export default function CreateEventPage() {
               rows={4}
             />
             {errors.description && (
-              <p className="text-sm">{errors.description.message}</p>
+              <p className="text-sm text-red-400">
+                {errors.description.message}
+              </p>
             )}
           </div>
 
@@ -471,7 +543,7 @@ export default function CreateEventPage() {
               placeholder="Ex: 100"
             />
             {errors.capacity && (
-              <p className="text-sm">{errors.capacity.message}</p>
+              <p className="text-sm text-red-400">{errors.capacity.message}</p>
             )}
           </div>
 
@@ -503,6 +575,13 @@ export default function CreateEventPage() {
           }}
         />
       )}
+
+      {/* Upgrade Modal */}
+      <UpgradeModal
+        isOpen={showUpgradeModal}
+        onClose={() => setShowUpgradeModal(false)}
+        trigger={upgradeReason}
+      />
     </div>
   );
 }

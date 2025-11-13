@@ -1,3 +1,4 @@
+import { auth } from "@clerk/nextjs/server";
 import { internal } from "./_generated/api";
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
@@ -29,14 +30,26 @@ export const createEvent = mutation({
     try {
       const user = await ctx.runQuery(internal.users.getCurrentUser);
 
-      const premium = true; // Placeholder for premium check
+      const { has } = await auth();
+      const hasPro = await has({ plan: "pro" });
 
-      // Check if user can create event (free limit)
-      if (user.freeEventsCreated >= 1 && !premium) {
+      // SERVER-SIDE CHECK: Verify event limit for Free users
+      if (!hasPro && user.freeEventsCreated >= 1) {
         throw new Error(
-          "Free event limit reached. Please upgrade to create more events."
+          "Free event limit reached. Please upgrade to Pro to create more events."
         );
       }
+
+      // SERVER-SIDE CHECK: Verify custom color usage
+      const defaultColor = "#1e3a8a";
+      if (!hasPro && args.themeColor && args.themeColor !== defaultColor) {
+        throw new Error(
+          "Custom theme colors are a Pro feature. Please upgrade to Pro."
+        );
+      }
+
+      // Force default color for Free users
+      const themeColor = hasPro ? args.themeColor : defaultColor;
 
       // Generate slug from title
       const slug = args.title
@@ -47,6 +60,7 @@ export const createEvent = mutation({
       // Create event
       const eventId = await ctx.db.insert("events", {
         ...args,
+        themeColor, // Use validated color
         slug: `${slug}-${Date.now()}`,
         organizerId: user._id,
         organizerName: user.name,
@@ -55,7 +69,7 @@ export const createEvent = mutation({
         updatedAt: Date.now(),
       });
 
-      // Update user's free event count if it's a free event
+      // Update user's free event count
       await ctx.db.patch(user._id, {
         freeEventsCreated: user.freeEventsCreated + 1,
       });
