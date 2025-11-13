@@ -7,19 +7,19 @@
 
 ```
 # Deployment used by `npx convex dev`
-CONVEX_DEPLOYMENT=dev:insightful-ptarmigan-917 # team: piyush-agarwal-roadside-coder, project: ai-event-organiser
+CONVEX_DEPLOYMENT=
 
-NEXT_PUBLIC_CONVEX_URL=https://insightful-ptarmigan-917.convex.cloud
+NEXT_PUBLIC_CONVEX_URL=
 
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_Zmx1ZW50LXRlYWwtNi5jbGVyay5hY2NvdW50cy5kZXYk
-CLERK_SECRET_KEY=sk_test_idkAGLj8bOP6QnMQaDSVDsovvlFQmPOOYTJwe19bpM
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
 
 NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
 NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
 
-CLERK_JWT_ISSUER_DOMAIN=https://fluent-teal-6.clerk.accounts.dev
+CLERK_JWT_ISSUER_DOMAIN=
 
-NEXT_PUBLIC_UNSPLASH_ACCESS_KEY=7UYSb1f2ctfZNUfvwGaBE4VMGsSXadxqWILDtd_IsqM
+NEXT_PUBLIC_UNSPLASH_ACCESS_KEY=
 
-GEMINI_API_KEY=AIzaSyAT_X44Wn5j9nlPbbcIz0oT7ox2Yucw9FE
+GEMINI_API_KEY=
 ```
