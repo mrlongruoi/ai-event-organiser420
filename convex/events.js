@@ -1,4 +1,3 @@
-import { auth } from "@clerk/nextjs/server";
 import { internal } from "./_generated/api";
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
@@ -25,13 +24,11 @@ export const createEvent = mutation({
     ticketPrice: v.optional(v.number()),
     coverImage: v.optional(v.string()),
     themeColor: v.optional(v.string()),
+    hasPro: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
     try {
       const user = await ctx.runQuery(internal.users.getCurrentUser);
-
-      const { has } = await auth();
-      const hasPro = await has({ plan: "pro" });
 
       // SERVER-SIDE CHECK: Verify event limit for Free users
       if (!hasPro && user.freeEventsCreated >= 1) {
