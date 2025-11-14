@@ -85,12 +85,6 @@ export const completeOnboarding = mutation({
       city: v.string(),
       state: v.optional(v.string()), // Added state field
       country: v.string(),
-      coordinates: v.optional(
-        v.object({
-          lat: v.number(),
-          lng: v.number(),
-        })
-      ),
     }),
     interests: v.array(v.string()), // Min 3 categories
   },
@@ -101,35 +95,6 @@ export const completeOnboarding = mutation({
       location: args.location,
       interests: args.interests,
       hasCompletedOnboarding: true,
-      updatedAt: Date.now(),
-    });
-
-    return user._id;
-  },
-});
-
-// Update organizer profile
-export const updateOrganizerProfile = mutation({
-  args: {
-    bio: v.optional(v.string()),
-    website: v.optional(v.string()),
-    socialLinks: v.optional(
-      v.object({
-        twitter: v.optional(v.string()),
-        instagram: v.optional(v.string()),
-        linkedin: v.optional(v.string()),
-      })
-    ),
-  },
-  handler: async (ctx, args) => {
-    const user = await ctx.runQuery(internal.users.getCurrentUser);
-
-    await ctx.db.patch(user._id, {
-      organizerProfile: {
-        bio: args.bio,
-        website: args.website,
-        socialLinks: args.socialLinks,
-      },
       updatedAt: Date.now(),
     });
 
