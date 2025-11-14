@@ -44,7 +44,7 @@ export default defineSchema({
       })
     ),
 
-    // Organizer tracking (Clerk Billing handles subscription)
+    // Organizer tracking (User Subscription)
     freeEventsCreated: v.number(), // Track free event limit (1 free)
 
     // Timestamps
@@ -78,13 +78,6 @@ export default defineSchema({
     city: v.string(),
     state: v.optional(v.string()), // Added state field
     country: v.string(),
-    coordinates: v.optional(
-      v.object({
-        lat: v.number(),
-        lng: v.number(),
-      })
-    ),
-    onlineLink: v.optional(v.string()),
 
     // Capacity & Ticketing
     capacity: v.number(),

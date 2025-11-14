@@ -8,9 +8,6 @@ import { api } from "@/convex/_generated/api";
 // Pages that require onboarding (attendee-centered)
 const ATTENDEE_PAGES = ["/explore", "/events", "/my-tickets", "/profile"];
 
-// Pages that don't require onboarding (organizer-centered or public)
-const SKIP_ONBOARDING_PAGES = ["/create-event", "/dashboard", "/my-events"];
-
 export function useOnboarding() {
   const [showOnboarding, setShowOnboarding] = useState(false);
   const pathname = usePathname();

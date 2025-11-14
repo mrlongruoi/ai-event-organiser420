@@ -18,7 +18,6 @@ export const createEvent = mutation({
     city: v.string(),
     state: v.optional(v.string()),
     country: v.string(),
-    onlineLink: v.optional(v.string()),
     capacity: v.number(),
     ticketType: v.union(v.literal("free"), v.literal("paid")),
     ticketPrice: v.optional(v.number()),

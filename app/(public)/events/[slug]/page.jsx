@@ -176,48 +176,29 @@ export default function EventDetailPage() {
                   <MapPin className="w-6 h-6 text-purple-500" />
                   Location
                 </h2>
-                {event.locationType === "online" ? (
-                  <div className="space-y-3">
-                    <p className="text-muted-foreground">
-                      This is an online event
+
+                <div className="space-y-3">
+                  <p className="font-medium">
+                    {event.city}, {event.state || event.country}
+                  </p>
+                  {event.address && (
+                    <p className="text-sm text-muted-foreground">
+                      {event.address}
                     </p>
-                    {event.onlineLink && (
-                      <Button variant="outline" asChild className="gap-2">
-                        <a
-                          href={event.onlineLink}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          Join Online
-                          <ExternalLink className="w-4 h-4" />
-                        </a>
-                      </Button>
-                    )}
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    <p className="font-medium">
-                      {event.city}, {event.state || event.country}
-                    </p>
-                    {event.address && (
-                      <p className="text-sm text-muted-foreground">
-                        {event.address}
-                      </p>
-                    )}
-                    {event.venue && (
-                      <Button variant="outline" asChild className="gap-2">
-                        <a
-                          href={event.venue}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          View on Map
-                          <ExternalLink className="w-4 h-4" />
-                        </a>
-                      </Button>
-                    )}
-                  </div>
-                )}
+                  )}
+                  {event.venue && (
+                    <Button variant="outline" asChild className="gap-2">
+                      <a
+                        href={event.venue}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        View on Map
+                        <ExternalLink className="w-4 h-4" />
+                      </a>
+                    </Button>
+                  )}
+                </div>
               </CardContent>
             </Card>
 
