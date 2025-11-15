@@ -96,10 +96,10 @@ This is your chance to expand your professional network, find potential co-found
 Continental breakfast included in registration.`,
     category: "business",
     tags: ["business", "networking", "startup", "entrepreneurship"],
-    city: "Gurugram",
+    city: "Gurgaon",
     state: "Haryana",
-    venue: "https://maps.google.com/?q=91springboard+Gurugram",
-    address: "91springboard, Sector 44, Gurugram",
+    venue: "https://maps.google.com/?q=91springboard+Gurgaon",
+    address: "91springboard, Sector 44, Gurgaon",
     capacity: 40,
     ticketType: "paid",
     ticketPrice: 299,
@@ -417,6 +417,215 @@ Sleeping bags welcome. Food and drinks provided throughout.`,
       "https://images.unsplash.com/photo-1556438064-2d7646166914?w=1200&q=80",
     themeColor: "#4c1d95",
   },
+  {
+    title: "AI Product Building Workshop - From Idea to MVP",
+    description: `Learn to build AI-powered products from scratch in this hands-on workshop!
+
+What you'll build:
+- AI-powered customer support chatbot
+- Intelligent document summarizer
+- Smart recommendation engine prototype
+
+Skills covered:
+- Product ideation with AI capabilities
+- API integration (OpenAI, Anthropic, Google)
+- Prompt engineering for production
+- UI/UX for AI products
+- Deployment and scaling basics
+
+Perfect for product managers, entrepreneurs, and developers looking to add AI to their toolkit. No prior ML experience needed - we focus on practical application!
+
+Lunch and refreshments included. Bring your laptop!`,
+    category: "tech",
+    tags: ["tech", "ai", "product", "startup"],
+    city: "Gurgaon",
+    state: "Haryana",
+    venue: "https://maps.google.com/?q=Innov8+Cyber+Hub+Gurgaon",
+    address: "Innov8 Coworking, Cyber Hub, DLF Cyber City, Gurgaon",
+    capacity: 40,
+    ticketType: "paid",
+    ticketPrice: 1499,
+    coverImage:
+      "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=1200&q=80",
+    themeColor: "#4c1d95",
+  },
+  {
+    title: "Startup Founder's Breakfast - Funding & Growth Stories",
+    description: `Connect with fellow founders and learn from successful entrepreneurs over breakfast!
+
+Featured speakers:
+- Series B founder sharing fundraising journey
+- Angel investor revealing what they look for
+- Growth hacker with proven scaling strategies
+- Failed startup founder sharing lessons learned
+
+Agenda:
+- 8:00 AM - Networking breakfast
+- 9:00 AM - Panel discussion
+- 10:00 AM - Q&A session
+- 10:30 AM - One-on-one speed networking
+
+This intimate gathering is perfect for early-stage founders, aspiring entrepreneurs, and anyone interested in the startup ecosystem.
+
+Continental breakfast and unlimited coffee included!`,
+    category: "business",
+    tags: ["business", "startup", "networking", "entrepreneurship"],
+    city: "Gurgaon",
+    state: "Haryana",
+    venue: "https://maps.google.com/?q=WeWork+Two+Horizon+Center+Gurgaon",
+    address: "WeWork Two Horizon Center, Golf Course Road, Gurgaon",
+    capacity: 35,
+    ticketType: "paid",
+    ticketPrice: 399,
+    coverImage:
+      "https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=1200&q=80",
+    themeColor: "#065f46",
+  },
+  {
+    title: "Weekend Photography Masterclass - Portrait & Street",
+    description: `Elevate your photography skills with professional techniques!
+
+Day 1 - Portrait Photography:
+- Lighting setups (natural & artificial)
+- Posing and directing subjects
+- Camera settings for portraits
+- Live model shoot session
+- Post-processing in Lightroom
+
+Day 2 - Street Photography:
+- Finding compelling stories
+- Composition techniques
+- Candid vs posed shots
+- Photo walk in Cyber Hub
+- Ethics in street photography
+
+Equipment: DSLR/Mirrorless camera required (no phone cameras for this workshop). Tripod optional.
+
+All skill levels welcome. You'll leave with a portfolio of stunning images!
+
+Snacks and beverages provided both days.`,
+    category: "art",
+    tags: ["art", "photography", "workshop", "creative"],
+    city: "Gurgaon",
+    state: "Haryana",
+    venue: "https://maps.google.com/?q=Visual+Arts+Gallery+Gurgaon",
+    address: "Visual Arts Gallery, Sector 44, Gurgaon",
+    capacity: 20,
+    ticketType: "paid",
+    ticketPrice: 2499,
+    coverImage:
+      "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=1200&q=80",
+    themeColor: "#92400e",
+  },
+  {
+    title: "Corporate Cricket Tournament - Season 3",
+    description: `The biggest corporate cricket showdown in Gurgaon is back!
+
+Tournament format:
+- 12 corporate teams competing
+- T10 format (10 overs per side)
+- League stage + knockout rounds
+- Professional umpires and scoring
+- Live commentary
+
+Prizes:
+- Winner: ₹1,00,000 + Trophy
+- Runner-up: ₹50,000
+- Best Batsman, Bowler & Player awards
+
+Register your company team (11 players + 4 substitutes). Individual registrations also open - we'll form mixed teams.
+
+What's included:
+- Professional cricket ground
+- Match balls and equipment
+- Refreshments throughout
+- Team jerseys
+- Photos & videos
+
+Perfect for team building and corporate bonding!`,
+    category: "sports",
+    tags: ["sports", "cricket", "corporate", "tournament"],
+    city: "Gurgaon",
+    state: "Haryana",
+    venue: "https://maps.google.com/?q=Tau+Devi+Lal+Stadium+Gurgaon",
+    address: "Tau Devi Lal Stadium, Sector 38, Gurgaon",
+    capacity: 180,
+    ticketType: "paid",
+    ticketPrice: 500,
+    coverImage:
+      "https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=1200&q=80",
+    themeColor: "#065f46",
+  },
+  {
+    title: "Mindfulness & Stress Management for Professionals",
+    description: `Combat workplace stress with evidence-based mindfulness techniques!
+
+This workshop is designed for busy professionals who want to:
+- Reduce anxiety and stress
+- Improve focus and productivity
+- Better manage work-life balance
+- Build emotional resilience
+- Enhance decision-making clarity
+
+Session includes:
+- Understanding stress response
+- Guided meditation practice
+- Breathing techniques for instant calm
+- Mindful communication at work
+- Creating daily wellness routines
+- Apps and tools for continued practice
+
+Led by a certified mindfulness coach with 10+ years of corporate wellness experience.
+
+Yoga mats and meditation cushions provided. Wear comfortable clothing.
+
+Healthy snacks and herbal teas included.`,
+    category: "health",
+    tags: ["health", "wellness", "mindfulness", "corporate"],
+    city: "Gurgaon",
+    state: "Haryana",
+    venue: "https://maps.google.com/?q=The+Yoga+Studio+Gurgaon",
+    address: "The Yoga Studio, South City 2, Gurgaon",
+    capacity: 25,
+    ticketType: "paid",
+    ticketPrice: 899,
+    coverImage:
+      "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1200&q=80",
+    themeColor: "#831843",
+  },
+  {
+    title: "Pizza Palooza: A Slice of Heaven",
+    description: `Join us for an evening of pizza making and tasting! Learn the secrets to crafting the perfect pizza dough and discover a variety of delicious toppings. You'll leave with new skills and a full stomach.`,
+    category: "food",
+    tags: ["food"],
+    city: "Gurgaon",
+    state: "Haryana",
+    venue: "https://maps.app.goo.gl/YXJ5J2eCVWbskBSL9",
+    address:
+      "32nd Avenue - NH 48, Sector 15 Part 2, Sector 15, Gurgaon, Haryana 122001",
+    capacity: 10,
+    ticketType: "free",
+    coverImage:
+      "https://images.unsplash.com/photo-1513104890138-7c749659a591?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NjkyNzJ8MHwxfHNlYXJjaHwxfHxwaXp6YXxlbnwwfHx8fDE3NjI5NTA5NTh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    themeColor: "#831843",
+  },
+  {
+    title: "React & Next.js: Building the Future of Web Applications",
+    description: `Explore the latest advancements in React and Next.js, and discover how these technologies are shaping modern web development. This event provides insights into server-side rendering, performance optimization, and the future roadmap for building scalable and efficient web applications. Attendees will gain practical knowledge and explore best practices for leveraging these powerful tools.`,
+    category: "tech",
+    tags: ["tech"],
+    city: "Gurgaon",
+    state: "Haryana",
+    venue: "https://maps.app.goo.gl/tgdtbwXkAwpHkHAw6",
+    address:
+      "Google Office - Tower A, IN-GUR-SIGA, Sector 15 Part 2, Village Silokhera, Gurgaon, Haryana 122001",
+    capacity: 75,
+    ticketType: "paid",
+    ticketPrice: 250,
+    coverImage:
+      "https://images.unsplash.com/photo-1633356122544-f134324a6cee?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NjkyNzJ8MHwxfHNlYXJjaHwxfHxyZWFjdCUyMGpzfGVufDB8fHx8MTc2Mjk0NjQ4M3ww&ixlib=rb-4.1.0&q=80&w=1080",
+    themeColor: "#1e3a8a",
+  },
 ];
 
 // Helper functions
@@ -473,12 +682,21 @@ export const run = internalMutation({
     for (const eventData of SAMPLE_EVENTS) {
       const startDate = getRandomFutureDate();
       const endDate = getEventEndTime(startDate);
-      const registrationCount = Math.floor(
-        Math.random() * eventData.capacity * 0.7
-      );
 
       const event = {
-        ...eventData,
+        title: eventData.title,
+        description: eventData.description,
+        category: eventData.category,
+        tags: eventData.tags,
+        city: eventData.city,
+        state: eventData.state,
+        venue: eventData.venue,
+        address: eventData.address,
+        capacity: eventData.capacity,
+        ticketType: eventData.ticketType,
+        ticketPrice: eventData.ticketPrice,
+        coverImage: eventData.coverImage,
+        themeColor: eventData.themeColor,
         slug: generateSlug(eventData.title),
         organizerId: organizer._id,
         organizerName: organizer.name,
@@ -487,7 +705,6 @@ export const run = internalMutation({
         timezone: "Asia/Kolkata",
         locationType: "physical",
         country: "India",
-        registrationCount,
         createdAt: Date.now(),
         updatedAt: Date.now(),
       };
