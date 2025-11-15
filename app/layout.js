@@ -1,7 +1,7 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import Header from "@/components/header";
 import "./globals.css";
-import { shadesOfPurple } from "@clerk/themes";
+import { dark } from "@clerk/themes";
 import { ThemeProvider } from "@/components/theme-provider";
 import Footer from "@/components/footer";
 import { ConvexClientProvider } from "@/components/convex-client-provider";
@@ -22,7 +22,7 @@ export default function RootLayout({ children }) {
           enableSystem
           disableTransitionOnChange
         >
-          <ClerkProvider appearance={{ baseTheme: shadesOfPurple }}>
+          <ClerkProvider appearance={{ baseTheme: dark }}>
             <ConvexClientProvider>
               <Header />
 
