@@ -77,7 +77,7 @@ export default function MyEventsPage() {
               <EventCard
                 key={event._id}
                 event={event}
-                showActions
+                action="event"
                 onClick={() => handleEventClick(event._id)}
                 onDelete={handleDelete}
               />

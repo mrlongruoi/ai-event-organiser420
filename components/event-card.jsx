@@ -1,6 +1,6 @@
 "use client";
 
-import { Calendar, MapPin, Users, Trash2 } from "lucide-react";
+import { Calendar, MapPin, Users, Trash2, X, QrCode, Eye } from "lucide-react";
 import { format } from "date-fns";
 import Image from "next/image";
 import { getCategoryIcon, getCategoryLabel } from "@/lib/data";
@@ -11,9 +11,9 @@ import { Button } from "@/components/ui/button";
 export default function EventCard({
   event,
   onClick,
-  showActions = false,
   onDelete,
   variant = "grid", // "grid" or "list"
+  action = null, // "event" | "ticket" | null
   className = "",
 }) {
   // List variant (compact horizontal layout)
@@ -129,30 +129,47 @@ export default function EventCard({
           </div>
         </div>
 
-        {showActions && (
+        {action && (
           <div className="flex gap-2 pt-2">
+            {/* Primary button */}
             <Button
               variant="outline"
               size="sm"
-              className="flex-1"
+              className="flex-1 gap-2"
               onClick={(e) => {
                 e.stopPropagation();
                 onClick?.(e);
               }}
             >
-              View
+              {action === "event" ? (
+                <>
+                  <Eye className="w-4 h-4" />
+                  View
+                </>
+              ) : (
+                <>
+                  <QrCode className="w-4 h-4" />
+                  Show Ticket
+                </>
+              )}
             </Button>
+
+            {/* Secondary button - delete / cancel */}
             {onDelete && (
               <Button
                 variant="outline"
                 size="sm"
+                className="gap-2 text-red-500 hover:text-red-600 hover:bg-red-50"
                 onClick={(e) => {
                   e.stopPropagation();
                   onDelete(event._id);
                 }}
-                className="text-red-500 hover:text-red-600 hover:bg-red-50"
               >
-                <Trash2 className="w-4 h-4" />
+                {action === "event" ? (
+                  <Trash2 className="w-4 h-4" />
+                ) : (
+                  <X className="w-4 h-4" />
+                )}
               </Button>
             )}
           </div>

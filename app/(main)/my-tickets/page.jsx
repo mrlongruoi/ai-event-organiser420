@@ -4,31 +4,22 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
-import {
-  Ticket,
-  Calendar,
-  MapPin,
-  QrCode,
-  Loader2,
-  X,
-  CheckCircle,
-} from "lucide-react";
+import { Calendar, MapPin, Loader2, Ticket } from "lucide-react";
 import { useConvexQuery, useConvexMutation } from "@/hooks/use-convex-query";
 import { api } from "@/convex/_generated/api";
 import { toast } from "sonner";
 import QRCode from "react-qr-code";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { getCategoryIcon, getCategoryLabel } from "@/lib/data";
 import Link from "next/link";
+import EventCard from "@/components/event-card";
 
 export default function MyTicketsPage() {
   const router = useRouter();
@@ -37,6 +28,7 @@ export default function MyTicketsPage() {
   const { data: registrations, isLoading } = useConvexQuery(
     api.registrations.getMyRegistrations
   );
+
   const { mutate: cancelRegistration, isLoading: isCancelling } =
     useConvexMutation(api.registrations.cancelRegistration);
 
@@ -82,175 +74,59 @@ export default function MyTicketsPage() {
         </div>
 
         {/* Upcoming Tickets */}
-        {upcomingTickets && upcomingTickets.length > 0 && (
+        {upcomingTickets?.length > 0 && (
           <div className="mb-12">
             <h2 className="text-2xl font-bold mb-4">Upcoming Events</h2>
-            <div className="grid md:grid-cols-2 gap-6">
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {upcomingTickets.map((registration) => (
-                <Card key={registration._id} className="overflow-hidden py-0">
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <Badge variant="outline" className="gap-1">
-                        {getCategoryIcon(registration.event.category)}{" "}
-                        {getCategoryLabel(registration.event.category)}
-                      </Badge>
-                      {registration.checkedIn && (
-                        <Badge className="gap-1 bg-green-600">
-                          <CheckCircle className="w-3 h-3" />
-                          Checked In
-                        </Badge>
-                      )}
-                    </div>
-
-                    <h3
-                      className="text-xl font-bold mb-3 cursor-pointer hover:text-purple-400 transition-colors"
-                      onClick={() =>
-                        router.push(`/events/${registration.event.slug}`)
-                      }
-                    >
-                      {registration.event.title}
-                    </h3>
-
-                    <div className="space-y-2 text-sm text-muted-foreground mb-4">
-                      <div className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4" />
-                        <span>
-                          {format(registration.event.startDate, "PPP, h:mm a")}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <MapPin className="w-4 h-4" />
-                        <span>
-                          {registration.event.locationType === "online"
-                            ? "Online Event"
-                            : `${registration.event.city}, ${
-                                registration.event.state ||
-                                registration.event.country
-                              }`}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Ticket className="w-4 h-4" />
-                        <span className="font-mono text-xs">
-                          {registration.qrCode}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="flex-1 gap-2"
-                        onClick={() => setSelectedTicket(registration)}
-                      >
-                        <QrCode className="w-4 h-4" />
-                        Show QR Code
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() =>
-                          handleCancelRegistration(registration._id)
-                        }
-                        className="text-red-500 hover:text-red-600"
-                        disabled={isCancelling}
-                      >
-                        {isCancelling ? (
-                          <>
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                            Cancelling...
-                          </>
-                        ) : (
-                          <>
-                            <X className="w-4 h-4" />
-                          </>
-                        )}
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
+                <EventCard
+                  key={registration._id}
+                  event={registration.event}
+                  action="ticket"
+                  onClick={() => setSelectedTicket(registration)}
+                  onDelete={() => handleCancelRegistration(registration._id)}
+                />
               ))}
             </div>
           </div>
         )}
 
         {/* Past Tickets */}
-        {pastTickets && pastTickets.length > 0 && (
+        {pastTickets?.length > 0 && (
           <div>
             <h2 className="text-2xl font-bold mb-4">Past Events</h2>
-            <div className="grid md:grid-cols-2 gap-6">
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {pastTickets.map((registration) => (
-                <Card
+                <EventCard
                   key={registration._id}
-                  className="overflow-hidden opacity-60"
-                >
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <Badge variant="outline" className="gap-1">
-                        {getCategoryIcon(registration.event.category)}{" "}
-                        {getCategoryLabel(registration.event.category)}
-                      </Badge>
-                      {registration.status === "cancelled" ? (
-                        <Badge variant="destructive">Cancelled</Badge>
-                      ) : registration.checkedIn ? (
-                        <Badge className="gap-1 bg-green-600">
-                          <CheckCircle className="w-3 h-3" />
-                          Attended
-                        </Badge>
-                      ) : (
-                        <Badge variant="secondary">Past Event</Badge>
-                      )}
-                    </div>
-
-                    <h3 className="text-xl font-bold mb-3">
-                      {registration.event.title}
-                    </h3>
-
-                    <div className="space-y-2 text-sm text-muted-foreground">
-                      <div className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4" />
-                        <span>
-                          {format(registration.event.startDate, "PPP, h:mm a")}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <MapPin className="w-4 h-4" />
-                        <span>
-                          {registration.event.locationType === "online"
-                            ? "Online Event"
-                            : `${registration.event.city}, ${
-                                registration.event.state ||
-                                registration.event.country
-                              }`}
-                        </span>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                  event={registration.event}
+                  action={null}
+                  className="opacity-60"
+                />
               ))}
             </div>
           </div>
         )}
 
         {/* Empty State */}
-        {(!upcomingTickets || upcomingTickets.length === 0) &&
-          (!pastTickets || pastTickets.length === 0) && (
-            <Card className="p-12 text-center">
-              <div className="max-w-md mx-auto space-y-4">
-                <div className="text-6xl mb-4">🎟️</div>
-                <h2 className="text-2xl font-bold">No tickets yet</h2>
-                <p className="text-muted-foreground">
-                  Register for events to see your tickets here
-                </p>
-                <Button asChild className="gap-2">
-                  <Link href="/explore">
-                    <Ticket className="w-4 h-4" />
-                  </Link>
-                </Button>
-              </div>
-            </Card>
-          )}
+        {!upcomingTickets?.length && !pastTickets?.length && (
+          <Card className="p-12 text-center">
+            <div className="max-w-md mx-auto space-y-4">
+              <div className="text-6xl mb-4">🎟️</div>
+              <h2 className="text-2xl font-bold">No tickets yet</h2>
+              <p className="text-muted-foreground">
+                Register for events to see your tickets here
+              </p>
+              <Button asChild className="gap-2">
+                <Link href="/explore">
+                  <Ticket className="w-4 h-4" /> Browse Events
+                </Link>
+              </Button>
+            </div>
+          </Card>
+        )}
       </div>
 
       {/* QR Code Modal */}
