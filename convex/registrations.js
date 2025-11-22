@@ -106,6 +106,43 @@ export const getMyRegistrations = query({
   },
 });
 
+// Cancel registration
+export const cancelRegistration = mutation({
+  args: { registrationId: v.id("registrations") },
+  handler: async (ctx, args) => {
+    const user = await ctx.runQuery(internal.users.getCurrentUser);
+
+    const registration = await ctx.db.get(args.registrationId);
+    if (!registration) {
+      throw new Error("Registration not found");
+    }
+
+    // Check if user owns this registration
+    if (registration.userId !== user._id) {
+      throw new Error("You are not authorized to cancel this registration");
+    }
+
+    const event = await ctx.db.get(registration.eventId);
+    if (!event) {
+      throw new Error("Event not found");
+    }
+
+    // Update registration status
+    await ctx.db.patch(args.registrationId, {
+      status: "cancelled",
+    });
+
+    // Decrement event registration count
+    if (event.registrationCount > 0) {
+      await ctx.db.patch(registration.eventId, {
+        registrationCount: event.registrationCount - 1,
+      });
+    }
+
+    return { success: true };
+  },
+});
+
 // Get registrations for an event (for organizers)
 export const getEventRegistrations = query({
   args: { eventId: v.id("events") },
@@ -180,42 +217,5 @@ export const checkInAttendee = mutation({
         checkedInAt: Date.now(),
       },
     };
-  },
-});
-
-// Cancel registration
-export const cancelRegistration = mutation({
-  args: { registrationId: v.id("registrations") },
-  handler: async (ctx, args) => {
-    const user = await ctx.runQuery(internal.users.getCurrentUser);
-
-    const registration = await ctx.db.get(args.registrationId);
-    if (!registration) {
-      throw new Error("Registration not found");
-    }
-
-    // Check if user owns this registration
-    if (registration.userId !== user._id) {
-      throw new Error("You are not authorized to cancel this registration");
-    }
-
-    const event = await ctx.db.get(registration.eventId);
-    if (!event) {
-      throw new Error("Event not found");
-    }
-
-    // Update registration status
-    await ctx.db.patch(args.registrationId, {
-      status: "cancelled",
-    });
-
-    // Decrement event registration count
-    if (event.registrationCount > 0) {
-      await ctx.db.patch(registration.eventId, {
-        registrationCount: event.registrationCount - 1,
-      });
-    }
-
-    return { success: true };
   },
 });
